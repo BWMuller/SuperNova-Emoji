@@ -8,9 +8,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
-import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
+import hani.momanii.supernova_emoji_library.actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
 
 public class MainActivity extends AppCompatActivity {
 

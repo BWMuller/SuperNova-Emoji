@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package hani.momanii.supernova_emoji_library.Helper;
+package hani.momanii.supernova_emoji_library.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import java.util.ArrayList;

@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package hani.momanii.supernova_emoji_library.Helper;
+package hani.momanii.supernova_emoji_library.helper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import hani.momanii.supernova_emoji_library.R;
 
@@ -28,41 +30,53 @@ import hani.momanii.supernova_emoji_library.R;
  * @author Hieu Rocker (rockerhieu@gmail.com).
  * @author Hani Al Momani (hani.momanii@gmail.com)
  */
-public class EmojiconEditText extends EditText {
+public class EmojiconTextView extends TextView {
     private int mEmojiconSize;
     private int mEmojiconAlignment;
     private int mEmojiconTextSize;
+    private int mTextStart = 0;
+    private int mTextLength = -1;
     private boolean mUseSystemDefault = false;
 
-    public EmojiconEditText(Context context) {
+    public EmojiconTextView(Context context) {
         super(context);
-        mEmojiconSize = (int) getTextSize();
-        mEmojiconTextSize = (int) getTextSize();
+        init(null);
     }
 
-    public EmojiconEditText(Context context, AttributeSet attrs) {
+    public EmojiconTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public EmojiconEditText(Context context, AttributeSet attrs, int defStyle) {
+    public EmojiconTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs);
     }
 
     private void init(AttributeSet attrs) {
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Emojicon);
-        mEmojiconSize = (int) a.getDimension(R.styleable.Emojicon_emojiconSize, getTextSize());
-        mEmojiconAlignment = a.getInt(R.styleable.Emojicon_emojiconAlignment, DynamicDrawableSpan.ALIGN_BASELINE);
-        mUseSystemDefault = a.getBoolean(R.styleable.Emojicon_emojiconUseSystemDefault, false);
-        a.recycle();
         mEmojiconTextSize = (int) getTextSize();
+        if (attrs == null) {
+            mEmojiconSize = (int) getTextSize();
+        } else {
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Emojicon);
+            mEmojiconSize = (int) a.getDimension(R.styleable.Emojicon_emojiconSize, getTextSize());
+            mEmojiconAlignment = a.getInt(R.styleable.Emojicon_emojiconAlignment, DynamicDrawableSpan.ALIGN_BOTTOM);
+            mTextStart = a.getInteger(R.styleable.Emojicon_emojiconTextStart, 0);
+            mTextLength = a.getInteger(R.styleable.Emojicon_emojiconTextLength, -1);
+            mUseSystemDefault = a.getBoolean(R.styleable.Emojicon_emojiconUseSystemDefault, mUseSystemDefault);
+            a.recycle();
+        }
         setText(getText());
     }
 
     @Override
-    protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
-        updateText();
+    public void setText(CharSequence text, BufferType type) {
+        if (!TextUtils.isEmpty(text)) {
+            SpannableStringBuilder builder = new SpannableStringBuilder(text);
+            EmojiconHandler.addEmojis(getContext(), builder, mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize, mTextStart, mTextLength, mUseSystemDefault);
+            text = builder;
+        }
+        super.setText(text, type);
     }
 
     /**
@@ -70,12 +84,7 @@ public class EmojiconEditText extends EditText {
      */
     public void setEmojiconSize(int pixels) {
         mEmojiconSize = pixels;
-
-        updateText();
-    }
-
-    private void updateText() {
-        EmojiconHandler.addEmojis(getContext(), getText(), mEmojiconSize, mEmojiconAlignment, mEmojiconTextSize, mUseSystemDefault);
+        super.setText(getText());
     }
 
     /**

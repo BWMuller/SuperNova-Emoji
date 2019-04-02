@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package hani.momanii.supernova_emoji_library.Actions;
+package hani.momanii.supernova_emoji_library.actions;
 
 import android.content.Context;
 import android.view.KeyEvent;
@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconGridView;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconsPopup;
+import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.helper.EmojiconGridView;
+import hani.momanii.supernova_emoji_library.helper.EmojiconsPopup;
 import hani.momanii.supernova_emoji_library.R;
 import hani.momanii.supernova_emoji_library.emoji.Emojicon;
 
