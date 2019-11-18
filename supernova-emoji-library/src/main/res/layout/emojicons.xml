@@ -14,124 +14,124 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/emojis_tab"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dip"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:background="@null"
+            android:id="@+id/emojis_tab_0_recents"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@null"
             android:scaleType="center"
-            android:id="@+id/emojis_tab_0_recents"
             android:src="@drawable/selector_emoji_recent" />
 
 
-
         <ImageButton
-            android:background="@null"
+            android:id="@+id/emojis_tab_1_people"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@null"
             android:scaleType="center"
-            android:id="@+id/emojis_tab_1_people"
             android:src="@drawable/selector_emoji_people" />
 
 
         <ImageButton
-            android:background="@null"
+            android:id="@+id/emojis_tab_2_nature"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@null"
             android:scaleType="center"
-            android:id="@+id/emojis_tab_2_nature"
             android:src="@drawable/selector_emoji_nature" />
 
 
-
         <ImageButton
-        android:background="@null"
-        android:layout_width="0dip"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="center"
-        android:id="@+id/emojis_tab_3_food"
-        android:src="@drawable/selector_emoji_food" />
-
-
-        <ImageButton
-            android:background="@null"
+            android:id="@+id/emojis_tab_3_food"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@null"
             android:scaleType="center"
+            android:src="@drawable/selector_emoji_food" />
+
+
+        <ImageButton
             android:id="@+id/emojis_tab_4_sport"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:scaleType="center"
             android:src="@drawable/selector_emoji_activity" />
 
 
-
         <ImageButton
-            android:background="@null"
+            android:id="@+id/emojis_tab_5_cars"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@null"
             android:scaleType="center"
-            android:id="@+id/emojis_tab_5_cars"
             android:src="@drawable/selector_emoji_travel" />
 
 
-
         <ImageButton
-            android:background="@null"
+            android:id="@+id/emojis_tab_6_elec"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@null"
             android:scaleType="center"
-            android:id="@+id/emojis_tab_6_elec"
             android:src="@drawable/selector_emoji_objects" />
 
 
-
         <ImageButton
-            android:background="@null"
+            android:id="@+id/emojis_tab_7_sym"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@null"
             android:scaleType="center"
-            android:id="@+id/emojis_tab_7_sym"
             android:src="@drawable/selector_emoji_symbols" />
 
 
-
         <ImageButton
+            android:id="@+id/emojis_backspace"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
-            android:id="@+id/emojis_backspace"
             android:src="@drawable/emoji_x" />
     </LinearLayout>
 
     <android.support.v4.view.ViewPager
-        android:layout_below="@id/emojis_tab"
         android:id="@+id/emojis_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="#ffffff"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emojis_tab" />
 
     <View
+        android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#ffffff"
-        android:layout_below="@id/emojis_tab"
-        />
-</RelativeLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emojis_tab" />
+</android.support.constraint.ConstraintLayout>

@@ -1,15 +1,19 @@
 package momanii.hani.supernova_emoji;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import hani.momanii.supernova_emoji_library.actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.helper.EmojiconPicker;
 import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         rootView = findViewById(R.id.root_view);
         emojiButton = (ImageView) findViewById(R.id.emoji_btn);
+        Button dialog_trigger = (Button) findViewById(R.id.dialog_trigger);
         submitButton = (ImageView) findViewById(R.id.submit_btn);
         mCheckBox = (CheckBox) findViewById(R.id.use_system_default);
         emojiconEditText = (EmojiconEditText) findViewById(R.id.emojicon_edit_text);
@@ -62,6 +67,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newText = emojiconEditText.getText().toString();
                 textView.setText(newText);
+            }
+        });
+
+        dialog_trigger.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                EmojiconPicker picker = new EmojiconPicker();
+                picker.create(v.getContext(), true);
+                picker.setOnEmojiSelectedListener(new EmojiconPicker.OnSelectedListener() {
+                    @Override
+                    public void onSelected(@NonNull View view, @NonNull String emoji) {
+                        textView.setText(emoji);
+                    }
+                });
+                picker.show(v);
+
             }
         });
     }

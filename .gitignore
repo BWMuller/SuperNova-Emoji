@@ -8,3 +8,5 @@ example/src/main/gen
 .DS_Store
 /build
 /captures
+
+.idea/

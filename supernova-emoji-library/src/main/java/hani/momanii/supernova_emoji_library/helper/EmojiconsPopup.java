@@ -289,20 +289,20 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.emojicons, null, false);
         emojisPager = (ViewPager) view.findViewById(R.id.emojis_pager);
-        LinearLayout tabs=(LinearLayout)view.findViewById(R.id.emojis_tab);
+        LinearLayout tabs = (LinearLayout) view.findViewById(R.id.emojis_tab);
 
         emojisPager.setOnPageChangeListener(this);
         EmojiconRecents recents = this;
         mEmojisAdapter = new EmojisPagerAdapter(
                 Arrays.asList(
-                        new EmojiconRecentsGridView(mContext, null, null, this,mUseSystemDefault),
-                        new EmojiconGridView(mContext, People.DATA, recents, this,mUseSystemDefault),
-                        new EmojiconGridView(mContext, Nature.DATA, recents, this,mUseSystemDefault),
-                        new EmojiconGridView(mContext, Food.DATA, recents, this,mUseSystemDefault),
-                        new EmojiconGridView(mContext, Sport.DATA, recents, this,mUseSystemDefault),
-                        new EmojiconGridView(mContext, Cars.DATA, recents, this,mUseSystemDefault),
-                        new EmojiconGridView(mContext, Electr.DATA, recents, this,mUseSystemDefault),
-                        new EmojiconGridView(mContext, Symbols.DATA, recents, this,mUseSystemDefault)
+                        new EmojiconRecentsGridView(mContext, null, null, this.onEmojiconClickedListener, mUseSystemDefault),
+                        new EmojiconGridView(mContext, People.DATA, recents, this.onEmojiconClickedListener, mUseSystemDefault),
+                        new EmojiconGridView(mContext, Nature.DATA, recents, this.onEmojiconClickedListener, mUseSystemDefault),
+                        new EmojiconGridView(mContext, Food.DATA, recents, this.onEmojiconClickedListener, mUseSystemDefault),
+                        new EmojiconGridView(mContext, Sport.DATA, recents, this.onEmojiconClickedListener, mUseSystemDefault),
+                        new EmojiconGridView(mContext, Cars.DATA, recents, this.onEmojiconClickedListener, mUseSystemDefault),
+                        new EmojiconGridView(mContext, Electr.DATA, recents, this.onEmojiconClickedListener, mUseSystemDefault),
+                        new EmojiconGridView(mContext, Symbols.DATA, recents, this.onEmojiconClickedListener, mUseSystemDefault)
 
                 )
         );
@@ -327,25 +327,22 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
             });
         }
 
+        emojisPager.setBackgroundColor(Color.parseColor(backgroundColor));
+        tabs.setBackgroundColor(Color.parseColor(tabsColor));
+        for (int x = 0; x < mEmojiTabs.length; x++) {
+            ImageButton btn = (ImageButton) mEmojiTabs[x];
+            btn.setColorFilter(Color.parseColor(iconPressedColor));
+        }
 
-            emojisPager.setBackgroundColor(Color.parseColor(backgroundColor));
-            tabs.setBackgroundColor(Color.parseColor(tabsColor));
-            for(int x=0;x<mEmojiTabs.length;x++)
-            {
-                ImageButton btn=(ImageButton)mEmojiTabs[x];
-                btn.setColorFilter(Color.parseColor(iconPressedColor));
-            }
-
-            ImageButton imgBtn=(ImageButton)view.findViewById(R.id.emojis_backspace);
-            imgBtn.setColorFilter(Color.parseColor(iconPressedColor));
-            imgBtn.setBackgroundColor(Color.parseColor(backgroundColor));
-
+        ImageButton imgBtn = (ImageButton) view.findViewById(R.id.emojis_backspace);
+        imgBtn.setColorFilter(Color.parseColor(iconPressedColor));
+        imgBtn.setBackgroundColor(Color.parseColor(backgroundColor));
 
         view.findViewById(R.id.emojis_backspace).setOnTouchListener(new RepeatListener(500, 50, new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if(onEmojiconBackspaceClickedListener != null)
+                if (onEmojiconBackspaceClickedListener != null)
                     onEmojiconBackspaceClickedListener.onEmojiconBackspaceClicked(v);
             }
         }));
@@ -361,8 +358,7 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
 
         if (page == 0) {
             onPageSelected(page);
-        }
-        else {
+        } else {
             emojisPager.setCurrentItem(page, false);
         }
         return view;

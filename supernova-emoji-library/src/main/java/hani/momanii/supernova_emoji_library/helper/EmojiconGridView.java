@@ -18,6 +18,7 @@ package hani.momanii.supernova_emoji_library.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
@@ -33,15 +34,16 @@ import hani.momanii.supernova_emoji_library.emoji.People;
  */
 public class EmojiconGridView{
     public View rootView;
-    EmojiconsPopup mEmojiconPopup;
+    @Nullable
+    OnEmojiconClickedListener mOnEmojiconClickedListener;
     EmojiconRecents mRecents;
     Emojicon[] mData;
     private boolean mUseSystemDefault = false;
 
 
-    public EmojiconGridView(Context context, Emojicon[] emojicons, EmojiconRecents recents, EmojiconsPopup emojiconPopup, boolean useSystemDefault) {
+    public EmojiconGridView(Context context, Emojicon[] emojicons, EmojiconRecents recents, OnEmojiconClickedListener onEmojiconClickedListener, boolean useSystemDefault) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        mEmojiconPopup = emojiconPopup;
+        mOnEmojiconClickedListener = onEmojiconClickedListener;
         rootView = inflater.inflate(R.layout.emojicon_grid, null);
         setRecents(recents);
         GridView gridView = (GridView) rootView.findViewById(R.id.Emoji_GridView);
@@ -56,8 +58,8 @@ public class EmojiconGridView{
 
             @Override
             public void onEmojiconClicked(Emojicon emojicon) {
-                if (mEmojiconPopup.onEmojiconClickedListener != null) {
-                    mEmojiconPopup.onEmojiconClickedListener.onEmojiconClicked(emojicon);
+                if (mOnEmojiconClickedListener != null) {
+                    mOnEmojiconClickedListener.onEmojiconClicked(emojicon);
                 }
                 if (mRecents != null) {
                     mRecents.addRecentEmoji(rootView.getContext(), emojicon);
