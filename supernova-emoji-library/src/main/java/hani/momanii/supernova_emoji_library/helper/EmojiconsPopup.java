@@ -23,6 +23,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.ColorInt;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
@@ -38,6 +39,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,15 +71,16 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
     OnSoftKeyboardOpenCloseListener onSoftKeyboardOpenCloseListener;
     View rootView;
     Context mContext;
-    boolean mUseSystemDefault=false;
+    boolean mUseSystemDefault = false;
     View view;
-    int positionPager=0;
-    boolean setColor=false;
-    String iconPressedColor="#495C66";
-    String tabsColor="#DCE1E2";
-    String backgroundColor="#E6EBEF";
+    int positionPager = 0;
+    boolean setColor = false;
+    int iconPressedColor = Color.parseColor("#495C66");
+    int tabsColor = Color.parseColor("#DCE1E2");
+    int backgroundColor = Color.parseColor("#E6EBEF");
 
     private ViewPager emojisPager;
+
     /**
      * Constructor
      * @param rootView	The top most layout in your view hierarchy. The difference of this view and the screen height will be used to calculate the keyboard height.
@@ -86,9 +89,8 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
      * @param iconPressedColor .
      * @param tabsColor .
      * @param backgroundColor .
-
      */
-    public EmojiconsPopup(View rootView, Context mContext,boolean useSystemDefault, String iconPressedColor,String tabsColor,String backgroundColor){
+    public EmojiconsPopup(View rootView, Context mContext, boolean useSystemDefault, @ColorInt int iconPressedColor, @ColorInt int tabsColor, @ColorInt int backgroundColor) {
         super(mContext);
         this.setColor=true;
         this.backgroundColor=backgroundColor;
@@ -112,9 +114,9 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
      * @param mContext The context of current activity.
      * @param useSystemDefault .
      */
-    public EmojiconsPopup(View rootView, Context mContext,boolean useSystemDefault){
+    public EmojiconsPopup(View rootView, Context mContext, boolean useSystemDefault) {
         super(mContext);
-        this.mUseSystemDefault=useSystemDefault;
+        this.mUseSystemDefault = useSystemDefault;
         this.mContext = mContext;
         this.rootView = rootView;
         View customView = createCustomView();
@@ -124,24 +126,25 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
         setBackgroundDrawable(null);
 
     }
+
     /**
      * Set the listener for the event of keyboard opening or closing.
      */
-    public void setOnSoftKeyboardOpenCloseListener(OnSoftKeyboardOpenCloseListener listener){
+    public void setOnSoftKeyboardOpenCloseListener(OnSoftKeyboardOpenCloseListener listener) {
         this.onSoftKeyboardOpenCloseListener = listener;
     }
 
     /**
      * Set the listener for the event when any of the emojicon is clicked
      */
-    public void setOnEmojiconClickedListener(EmojiconGridView.OnEmojiconClickedListener listener){
+    public void setOnEmojiconClickedListener(EmojiconGridView.OnEmojiconClickedListener listener) {
         this.onEmojiconClickedListener = listener;
     }
 
     /**
      * Set the listener for the event when backspace on emojicon popup is clicked
      */
-    public void setOnEmojiconBackspaceClickedListener(OnEmojiconBackspaceClickedListener listener){
+    public void setOnEmojiconBackspaceClickedListener(OnEmojiconBackspaceClickedListener listener) {
         this.onEmojiconBackspaceClickedListener = listener;
     }
 
@@ -150,29 +153,29 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
      * NOTE: Since, the soft keyboard sizes are variable on different android devices, the
      * library needs you to open the soft keyboard atleast once before calling this function.
      * If that is not possible see showAtBottomPending() function.
-     *
      */
-    public void showAtBottom(){
+    public void showAtBottom() {
         showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
     }
+
     /**
      * Use this function when the soft keyboard has not been opened yet. This
      * will show the emoji popup after the keyboard is up next time.
      * Generally, you will be calling InputMethodManager.showSoftInput function after
      * calling this function.
      */
-    public void showAtBottomPending(){
-        if(isKeyBoardOpen())
+    public void showAtBottomPending() {
+        if (isKeyBoardOpen()) {
             showAtBottom();
-        else
+        } else {
             pendingOpen = true;
+        }
     }
 
     /**
-     *
      * @return Returns true if the soft keyboard is open, false otherwise.
      */
-    public Boolean isKeyBoardOpen(){
+    public Boolean isKeyBoardOpen() {
         return isOpened;
     }
 
@@ -182,49 +185,50 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
     @Override
     public void dismiss() {
         super.dismiss();
-        EmojiconRecentsManager
-                .getInstance(mContext).saveRecents();
+        EmojiconRecentsManager.getInstance(mContext)
+                .saveRecents();
     }
 
     /**
      * Call this function to resize the emoji popup according to your soft keyboard size
      */
-    public void setSizeForSoftKeyboard(){
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                rootView.getWindowVisibleDisplayFrame(r);
+    public void setSizeForSoftKeyboard() {
+        rootView.getViewTreeObserver()
+                .addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        Rect r = new Rect();
+                        rootView.getWindowVisibleDisplayFrame(r);
 
-                int screenHeight = getUsableScreenHeight();
-                int heightDifference = screenHeight
-                        - (r.bottom - r.top);
-                int resourceId = mContext.getResources()
-                        .getIdentifier("status_bar_height",
-                                "dimen", "android");
-                if (resourceId > 0) {
-                    heightDifference -= mContext.getResources()
-                            .getDimensionPixelSize(resourceId);
-                }
-                if (heightDifference > 100) {
-                    keyBoardHeight = heightDifference;
-                    setSize(LayoutParams.MATCH_PARENT, keyBoardHeight);
-                    if (isOpened == false) {
-                        if (onSoftKeyboardOpenCloseListener != null)
-                            onSoftKeyboardOpenCloseListener.onKeyboardOpen(keyBoardHeight);
+                        int screenHeight = getUsableScreenHeight();
+                        int heightDifference = screenHeight - (r.bottom - r.top);
+                        int resourceId = mContext.getResources()
+                                .getIdentifier("status_bar_height", "dimen", "android");
+                        if (resourceId > 0) {
+                            heightDifference -= mContext.getResources()
+                                    .getDimensionPixelSize(resourceId);
+                        }
+                        if (heightDifference > 100) {
+                            keyBoardHeight = heightDifference;
+                            setSize(LayoutParams.MATCH_PARENT, keyBoardHeight);
+                            if (isOpened == false) {
+                                if (onSoftKeyboardOpenCloseListener != null) {
+                                    onSoftKeyboardOpenCloseListener.onKeyboardOpen(keyBoardHeight);
+                                }
+                            }
+                            isOpened = true;
+                            if (pendingOpen) {
+                                showAtBottom();
+                                pendingOpen = false;
+                            }
+                        } else {
+                            isOpened = false;
+                            if (onSoftKeyboardOpenCloseListener != null) {
+                                onSoftKeyboardOpenCloseListener.onKeyboardClose();
+                            }
+                        }
                     }
-                    isOpened = true;
-                    if (pendingOpen) {
-                        showAtBottom();
-                        pendingOpen = false;
-                    }
-                } else {
-                    isOpened = false;
-                    if (onSoftKeyboardOpenCloseListener != null)
-                        onSoftKeyboardOpenCloseListener.onKeyboardClose();
-                }
-            }
-        });
+                });
     }
 
     private int getUsableScreenHeight() {
@@ -232,28 +236,32 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
             DisplayMetrics metrics = new DisplayMetrics();
 
             WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-            windowManager.getDefaultDisplay().getMetrics(metrics);
+            windowManager.getDefaultDisplay()
+                    .getMetrics(metrics);
 
             return metrics.heightPixels;
 
         } else {
-            return rootView.getRootView().getHeight();
+            return rootView.getRootView()
+                    .getHeight();
         }
     }
 
     /**
      * Manually set the popup window size
-     * @param width Width of the popup
+     *
+     * @param width  Width of the popup
      * @param height Height of the popup
      */
-    public void setSize(int width, int height){
+    public void setSize(int width, int height) {
         setWidth(width);
         setHeight(height);
     }
-    public  void updateUseSystemDefault(boolean mUseSystemDefault) {
+
+    public void updateUseSystemDefault(boolean mUseSystemDefault) {
         if (view != null) {
-            mEmojisAdapter=null;
-            positionPager=emojisPager.getCurrentItem();
+            mEmojisAdapter = null;
+            positionPager = emojisPager.getCurrentItem();
             dismiss();
 
             this.mUseSystemDefault = mUseSystemDefault;
@@ -262,27 +270,24 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
             mEmojiTabs[positionPager].setSelected(true);
             emojisPager.setCurrentItem(positionPager);
             onPageSelected(positionPager);
-            if(!isShowing()){
+            if (!isShowing()) {
 
                 //If keyboard is visible, simply show the emoji popup
-                if(isKeyBoardOpen()){
+                if (isKeyBoardOpen()) {
                     showAtBottom();
                     // changeEmojiKeyboardIcon(emojiButton, R.drawable.ic_action_keyboard);
                 }
 
                 //else, open the text keyboard first and immediately after that show the emoji popup
-                else{
+                else {
                     showAtBottomPending();
                     // changeEmojiKeyboardIcon(emojiButton, R.drawable.ic_action_keyboard);
                 }
             }
 
 
-
-
         }
     }
-
 
 
     private View createCustomView() {
@@ -327,16 +332,17 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
             });
         }
 
-        emojisPager.setBackgroundColor(Color.parseColor(backgroundColor));
-        tabs.setBackgroundColor(Color.parseColor(tabsColor));
+        emojisPager.setBackgroundColor(backgroundColor);
+        tabs.setBackgroundColor(tabsColor);
         for (int x = 0; x < mEmojiTabs.length; x++) {
             ImageButton btn = (ImageButton) mEmojiTabs[x];
-            btn.setColorFilter(Color.parseColor(iconPressedColor));
+            btn.setColorFilter(iconPressedColor);
         }
 
         ImageButton imgBtn = (ImageButton) view.findViewById(R.id.emojis_backspace);
-        imgBtn.setColorFilter(Color.parseColor(iconPressedColor));
-        imgBtn.setBackgroundColor(Color.parseColor(backgroundColor));
+
+        imgBtn.setColorFilter(iconPressedColor);
+        imgBtn.setBackgroundColor(backgroundColor);
 
         view.findViewById(R.id.emojis_backspace).setOnTouchListener(new RepeatListener(500, 50, new OnClickListener() {
 
@@ -366,7 +372,7 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
 
     @Override
     public void addRecentEmoji(Context context, Emojicon emojicon) {
-        EmojiconRecentsGridView fragment = ((EmojisPagerAdapter)emojisPager.getAdapter()).getRecentFragment();
+        EmojiconRecentsGridView fragment = ((EmojisPagerAdapter) emojisPager.getAdapter()).getRecentFragment();
         fragment.addRecentEmoji(context, emojicon);
     }
 
@@ -404,15 +410,29 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
     public void onPageScrollStateChanged(int i) {
     }
 
+    /**
+     * @param iconPressedColor The color of icons on tab
+     * @param tabsColor        The color of tabs background
+     * @param backgroundColor  The color of emoji background
+     */
+    public void setColors(final int iconPressedColor, final int tabsColor, final int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        this.iconPressedColor = iconPressedColor;
+        this.tabsColor = tabsColor;
+    }
+
     private static class EmojisPagerAdapter extends PagerAdapter {
         private List<EmojiconGridView> views;
-        public EmojiconRecentsGridView getRecentFragment(){
+
+        public EmojiconRecentsGridView getRecentFragment() {
             for (EmojiconGridView it : views) {
-                if(it instanceof EmojiconRecentsGridView)
-                    return (EmojiconRecentsGridView)it;
+                if (it instanceof EmojiconRecentsGridView) {
+                    return (EmojiconRecentsGridView) it;
+                }
             }
             return null;
         }
+
         public EmojisPagerAdapter(List<EmojiconGridView> views) {
             super();
             this.views = views;
@@ -427,13 +447,13 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View v = views.get(position).rootView;
-            ((ViewPager)container).addView(v, 0);
+            ((ViewPager) container).addView(v, 0);
             return v;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object view) {
-            ((ViewPager)container).removeView((View)view);
+            ((ViewPager) container).removeView((View) view);
         }
 
         @Override
@@ -481,10 +501,12 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
          *                        periodically
          */
         public RepeatListener(int initialInterval, int normalInterval, OnClickListener clickListener) {
-            if (clickListener == null)
+            if (clickListener == null) {
                 throw new IllegalArgumentException("null runnable");
-            if (initialInterval < 0 || normalInterval < 0)
+            }
+            if (initialInterval < 0 || normalInterval < 0) {
                 throw new IllegalArgumentException("negative interval");
+            }
 
             this.initialInterval = initialInterval;
             this.normalInterval = normalInterval;
@@ -514,12 +536,9 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
         void onEmojiconBackspaceClicked(View v);
     }
 
-    public interface OnSoftKeyboardOpenCloseListener{
+    public interface OnSoftKeyboardOpenCloseListener {
         void onKeyboardOpen(int keyBoardHeight);
+
         void onKeyboardClose();
     }
-
-
-
-
 }

@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         emojiconEditText2 = (EmojiconEditText) findViewById(R.id.emojicon_edit_text2);
         textView = (EmojiconTextView) findViewById(R.id.textView);
         emojIcon = new EmojIconActions(this, rootView, emojiconEditText, emojiButton);
-        emojIcon.ShowEmojIcon();
         emojIcon.setKeyboardListener(new EmojIconActions.KeyboardListener() {
             @Override
             public void onKeyboardOpen() {

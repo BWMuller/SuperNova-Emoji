@@ -69,7 +69,7 @@ class EmojiconPicker : OnPageChangeListener {
         val emojisPager = view.findViewById(R.id.emojis_pager) as ViewPager
         val tabs = view.findViewById(R.id.emojis_tab) as LinearLayout
 
-        emojisPager.setOnPageChangeListener(this)
+        emojisPager.addOnPageChangeListener(this)
         val recents = EmojiconRecents { context, emojicon ->
             (emojisPager.adapter as? EmojisPagerAdapter?)?.recentFragment?.addRecentEmoji(context, emojicon)
         }
